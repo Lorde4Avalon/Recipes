@@ -5,14 +5,13 @@ import com.recipes.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
 import javax.validation.Valid;
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -24,7 +23,7 @@ public class registerController {
     private PasswordEncoder encoder;
 
     @PostMapping("/register")
-    public void registerUser(@Valid @RequestBody User user) {
+    public Map<String, String> registerUser(@Valid @RequestBody User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -32,5 +31,6 @@ public class registerController {
         user.setActive(true);
         user.setRoles("ROLE_USER");
         userRepository.save(user);
+        return Collections.singletonMap("useremail", user.getEmail());
     }
 }
