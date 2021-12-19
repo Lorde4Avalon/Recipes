@@ -1,0 +1,11 @@
+version: "3"
+services:
+  recipes:
+    container_name: recipes
+    build: .
+    image: recipes_img
+    ports:
+      - "9999:8080"
+    restart: on-failure
+    environment:
+      - TZ=Asia/Shanghai
